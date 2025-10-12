@@ -2,7 +2,7 @@
 
 <img src="https://www.edwinkassier.com/Assets/Monogram.png" alt="Ashes Project Monogram" width="80" height="80">
 
-# DWML Backend Express API Boilerplate
+# Ashes Project Backend Express API Boilerplate
 
 **A modern Express.js API boilerplate for rapid development**
 
