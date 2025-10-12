@@ -1,24 +1,45 @@
-# Base image
-FROM node:lts-alpine
+# Multi-stage build for optimized production image
+FROM node:18-alpine AS builder
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
+# Copy package files
 COPY package*.json ./
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install dependencies
+RUN npm ci --production && npm cache clean --force
 
-# Install the app's dependencies
-RUN pnpm install
-
-# Copy the rest of the app's files to the container
+# Copy application code
 COPY . .
 
-# Expose port 3000 (the port your Express.js app will listen on)
+# Production stage
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Copy dependencies from builder
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
+COPY --chown=nodejs:nodejs . .
+
+# Create logs and data directories
+RUN mkdir -p logs data && chown -R nodejs:nodejs logs data
+
+# Switch to non-root user
+USER nodejs
+
+# Expose port
 EXPOSE 3000
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Set the container's default command
-CMD [ "pnpm", "start" ]
+# Start application
+CMD ["node", "index.js"]
