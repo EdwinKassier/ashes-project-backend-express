@@ -1,13 +1,12 @@
 /**
  * Standard success response formatter
  */
-export const successResponse = (res, data, message = 'Success', statusCode = 200) => {
-  return res.status(statusCode).json({
+export const successResponse = (res, data, message = 'Success', statusCode = 200) =>
+  res.status(statusCode).json({
     success: true,
     message,
     data,
   });
-};
 
 /**
  * Standard error response formatter
@@ -30,15 +29,8 @@ export const errorResponse = (res, message, statusCode = 500, errors = null) => 
 /**
  * Pagination response formatter
  */
-export const paginatedResponse = (
-  res,
-  data,
-  page,
-  limit,
-  total,
-  message = 'Success'
-) => {
-  return res.status(200).json({
+export const paginatedResponse = (res, data, page, limit, total, message = 'Success') =>
+  res.status(200).json({
     success: true,
     message,
     data,
@@ -49,4 +41,3 @@ export const paginatedResponse = (
       pages: Math.ceil(total / limit),
     },
   });
-};

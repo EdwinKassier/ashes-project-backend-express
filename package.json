@@ -5,21 +5,26 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node index.js",
-    "dev": "nodemon index.js",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "test:unit": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest tests/unit --coverage",
-    "test:integration": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest tests/integration",
+    "start": "node dist/index.js",
+    "start:dev": "NODE_ENV=development tsx watch --env-file=.env index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json --watch",
+    "dev": "tsx watch --env-file=.env index.js",
+    "test": "NODE_ENV=test jest --coverage",
+    "test:unit": "NODE_ENV=test jest tests/unit --coverage",
+    "test:integration": "NODE_ENV=test jest tests/integration",
     "test:e2e": "playwright test",
-    "test:watch": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "lint": "eslint src/**/*.js tests/**/*.js",
-    "lint:fix": "eslint src/**/*.js tests/**/*.js --fix",
-    "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\" \"*.js\"",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "lint": "eslint \"src/**/*.{ts,js}\" \"tests/**/*.{ts,js}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,js}\" \"tests/**/*.{ts,js}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,js}\" \"tests/**/*.{ts,js}\" \"*.{ts,js}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js}\" \"tests/**/*.{ts,js}\" \"*.{ts,js}\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "security:audit": "npm audit --audit-level=moderate",
     "security:check": "npm audit",
     "prepare": "node -e \"try { require('husky').install() } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e }\"",
-    "db:migrate": "node scripts/db-migrate.js"
+    "db:migrate": "tsx scripts/db-migrate.js"
   },
   "dependencies": {
     "compression": "^1.7.4",
@@ -38,10 +43,21 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
-    "@types/jest": "^29.5.11",
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.7.2",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.2",
     "husky": "^8.0.3",
@@ -49,10 +65,14 @@
     "lint-staged": "^15.2.0",
     "nodemon": "^3.0.2",
     "prettier": "^3.1.1",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{ts,js}": [
       "eslint --fix",
       "prettier --write"
     ]

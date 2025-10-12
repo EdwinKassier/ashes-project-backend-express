@@ -89,9 +89,8 @@ export const processRequest = async (req, res, _next) => {
  * Home/status endpoint
  * @route GET /
  */
-export const home = async (req, res) => {
-  return res.status(200).json({
+export const home = async (req, res) =>
+  res.status(200).json({
     result: 'Express server is running',
     status: true,
   });
-};

@@ -42,6 +42,10 @@ build/
 .next/
 out/
 
+# TypeScript
+*.tsbuildinfo
+*.d.ts.map
+
 # Database
 data/
 *.sqlite
