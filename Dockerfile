@@ -7,11 +7,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --production && npm cache clean --force
+# Install ALL dependencies (including TypeScript and dev deps for building)
+RUN npm ci && npm cache clean --force
 
 # Copy application code
 COPY . .
+
+# Build TypeScript to dist/
+RUN npm run build
 
 # Production stage
 FROM node:18-alpine
@@ -23,10 +26,21 @@ WORKDIR /app
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Copy dependencies from builder
-COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
-COPY --chown=nodejs:nodejs . .
+# Copy package files
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm ci --production && npm cache clean --force
+
+# Copy source files (JavaScript files that aren't converted yet)
+COPY --from=builder --chown=nodejs:nodejs /app/src ./src
+
+# Copy compiled TypeScript files from dist/src to src/ (merge them)
+# This ensures imports like './shared/utils/logger.js' work
+COPY --from=builder --chown=nodejs:nodejs /app/dist/src/. ./src/
+
+# Copy entry point
+COPY --chown=nodejs:nodejs index.js ./
 
 # Create logs and data directories
 RUN mkdir -p logs data && chown -R nodejs:nodejs logs data
