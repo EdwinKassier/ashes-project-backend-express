@@ -27,15 +27,16 @@ export const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Handle validation errors (Joi)
-  if (err.isJoi) {
+  // Handle validation errors (Zod)
+  if (err.isZod) {
     return res.status(400).json({
       success: false,
       error: {
         message: 'Validation error',
-        details: err.details.map((detail) => ({
-          message: detail.message,
-          path: detail.path,
+        details: err.errors.map((error) => ({
+          message: error.message,
+          path: error.path.join('.'),
+          code: error.code,
         })),
       },
     });
