@@ -31,6 +31,7 @@ const format = winston.format.combine(
   winston.format.printf((info) => {
     const { timestamp, level: lvl, message, ...rest } = info;
     const restString = Object.keys(rest).length ? JSON.stringify(rest, null, 2) : '';
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `${timestamp} ${lvl}: ${message} ${restString}`;
   })
 );

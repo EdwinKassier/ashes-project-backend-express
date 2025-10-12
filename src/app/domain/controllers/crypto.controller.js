@@ -46,6 +46,7 @@ export const getGraphData = async (req, res, next) => {
  * Legacy endpoint for backward compatibility
  * @route GET /process_request
  */
+// eslint-disable-next-line @typescript-eslint/require-await, no-unused-vars
 export const processRequest = async (req, res, _next) => {
   try {
     const { symbol, investment } = req.query;
@@ -89,6 +90,7 @@ export const processRequest = async (req, res, _next) => {
  * Home/status endpoint
  * @route GET /
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export const home = async (req, res) =>
   res.status(200).json({
     result: 'Express server is running',

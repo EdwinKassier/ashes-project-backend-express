@@ -3,5 +3,6 @@
  * Usage: router.get('/path', asyncHandler(asyncFunction))
  */
 export const asyncHandler = (fn) => (req, res, next) => {
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   Promise.resolve(fn(req, res, next)).catch(next);
 };

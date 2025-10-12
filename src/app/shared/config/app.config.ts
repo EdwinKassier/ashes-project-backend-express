@@ -50,6 +50,7 @@ const config: AppConfig = {
   database: {
     dialect: 'sqlite',
     storage: process.env.DB_PATH || './data/database.sqlite',
+    // eslint-disable-next-line no-console
     logging: process.env.DB_LOGGING === 'true' ? console.log : false,
   },
 
@@ -78,6 +79,8 @@ const missingEnvVars = requiredEnvVars.filter(
 );
 
 if (missingEnvVars.length > 0 && config.nodeEnv === 'production') {
+  // eslint-disable-next-line no-console
+  console.error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
   throw new Error(
     `Missing required environment variables: ${missingEnvVars.join(', ')}`
   );

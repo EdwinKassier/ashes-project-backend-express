@@ -5,7 +5,7 @@ import { logger } from '../utils/logger.js';
  * MUST have 4 parameters for Express to recognize it as error middleware
  */
 // eslint-disable-next-line no-unused-vars
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, _next) => {
   // Log error
   logger.error({
     message: err.message,

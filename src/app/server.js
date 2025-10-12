@@ -36,6 +36,7 @@ function setupGracefulShutdown() {
   const signals = ['SIGTERM', 'SIGINT'];
 
   signals.forEach((signal) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     process.on(signal, async () => {
       logger.info(`${signal} received`);
       await stopServer();
