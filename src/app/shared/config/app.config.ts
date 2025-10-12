@@ -3,14 +3,44 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
+type NodeEnv = 'development' | 'test' | 'production';
+
+interface DatabaseConfig {
+  dialect: 'sqlite';
+  storage: string;
+  logging: boolean | ((sql: string) => void);
+}
+
+interface RateLimitConfig {
+  enabled: boolean;
+  windowMs: number;
+  max: number;
+}
+
+interface LoggingConfig {
+  level: string;
+  format: string;
+}
+
+interface AppConfig {
+  port: number;
+  nodeEnv: NodeEnv;
+  jwtSecret: string;
+  allowedOrigins: string[];
+  database: DatabaseConfig;
+  krakenApiUrl: string;
+  rateLimit: RateLimitConfig;
+  logging: LoggingConfig;
+}
+
 /**
  * Application configuration
  * Validates required environment variables on startup
  */
-const config = {
+const config: AppConfig = {
   // Server
   port: parseInt(process.env.PORT || '3000', 10),
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv: (process.env.NODE_ENV as NodeEnv) || 'development',
 
   // Security
   jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-in-production',
@@ -41,7 +71,7 @@ const config = {
 };
 
 // Validate required configuration in production
-const requiredEnvVars = ['JWT_SECRET'];
+const requiredEnvVars: string[] = ['JWT_SECRET'];
 const missingEnvVars = requiredEnvVars.filter(
   (envVar) =>
     !process.env[envVar] || process.env[envVar] === 'dev-secret-change-in-production'
