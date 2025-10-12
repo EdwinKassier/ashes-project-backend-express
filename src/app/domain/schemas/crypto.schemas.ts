@@ -51,3 +51,7 @@ export const symbolParamSchema = z.object({
     })
     .transform((val) => val.toUpperCase()),
 });
+
+// Type inference from Zod schemas
+export type CryptoAnalysisQuery = z.infer<typeof cryptoAnalysisSchema>;
+export type SymbolParam = z.infer<typeof symbolParamSchema>;

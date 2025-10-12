@@ -2,7 +2,57 @@
  * Domain constants for cryptocurrency analysis
  */
 
-export const CRYPTO_CONSTANTS = {
+interface TimeIntervals {
+  SIX_HOURS: number;
+  ONE_WEEK: number;
+}
+
+interface KrakenAPI {
+  OHLC: string;
+}
+
+interface DataFrameColumns {
+  CLOSE_TIME: string;
+  OPEN_PRICE: string;
+  HIGH_PRICE: string;
+  LOW_PRICE: string;
+  CLOSE_PRICE: string;
+  VWAP: string;
+  VOLUME: string;
+  COUNT: string;
+}
+
+interface CacheSettings {
+  OPENING_AVERAGE_MONTHS: number;
+  CURRENT_DATA_WEEKS: number;
+}
+
+interface ValidationRules {
+  MIN_SYMBOL_LENGTH: number;
+  MAX_SYMBOL_LENGTH: number;
+  MIN_INVESTMENT: number;
+  MAX_INVESTMENT: number;
+}
+
+interface CryptoConstants {
+  LAMBO_PRICE: number;
+  TIME_INTERVALS: TimeIntervals;
+  KRAKEN_API: KrakenAPI;
+  DATAFRAME_COLUMNS: DataFrameColumns;
+  CACHE: CacheSettings;
+  VALIDATION: ValidationRules;
+}
+
+interface ErrorMessages {
+  SYMBOL_NOT_FOUND: string;
+  INVALID_INVESTMENT: string;
+  SYMBOL_REQUIRED: string;
+  INVESTMENT_REQUIRED: string;
+  API_ERROR: string;
+  DATA_PROCESSING_ERROR: string;
+}
+
+export const CRYPTO_CONSTANTS: CryptoConstants = {
   // Price of a Lamborghini for calculation
   LAMBO_PRICE: 200000,
 
@@ -44,7 +94,7 @@ export const CRYPTO_CONSTANTS = {
   },
 };
 
-export const ERROR_MESSAGES = {
+export const ERROR_MESSAGES: ErrorMessages = {
   SYMBOL_NOT_FOUND: "Symbol doesn't exist",
   INVALID_INVESTMENT: 'Invalid investment amount',
   SYMBOL_REQUIRED: 'Symbol is required',

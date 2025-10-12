@@ -9,13 +9,13 @@ const levels = {
   debug: 4,
 };
 
-const level = () => {
+const level = (): string => {
   const env = config.nodeEnv;
   const isDevelopment = env === 'development';
   return isDevelopment ? 'debug' : 'info';
 };
 
-const colors = {
+const colors: Record<string, string> = {
   error: 'red',
   warn: 'yellow',
   info: 'green',
@@ -35,7 +35,7 @@ const format = winston.format.combine(
   })
 );
 
-const transports = [
+const transports: winston.transport[] = [
   new winston.transports.Console(),
   new winston.transports.File({
     filename: 'logs/error.log',
@@ -54,5 +54,7 @@ export const logger = winston.createLogger({
 
 // Morgan stream for HTTP logs
 export const morganStream = {
-  write: (message) => logger.http(message.trim()),
+  write: (message: string): void => {
+    logger.http(message.trim());
+  },
 };
