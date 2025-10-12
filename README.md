@@ -1,10 +1,13 @@
 <div align="center">
 
-# DWML Backend Express API
+<img src="https://www.edwinkassier.com/Assets/Monogram.png" alt="Ashes Project Monogram" width="80" height="80">
+
+# DWML Backend Express API Boilerplate
 
 **A modern Express.js API boilerplate for rapid development**
 
 [![Node.js 18+](https://img.shields.io/badge/node-18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-blue.svg)](https://www.typescriptlang.org/)
 [![Express 4.18+](https://img.shields.io/badge/express-4.18+-blue.svg)](https://expressjs.com/)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://www.docker.com/)
 [![Code style: Prettier](https://img.shields.io/badge/code%20style-prettier-ff69b4.svg)](https://prettier.io/)
@@ -39,7 +42,7 @@
 
 ## Overview
 
-A production-ready Express.js API implementing cryptocurrency investment analysis with clean domain-driven architecture, comprehensive testing, and automated CI/CD pipelines.
+A production-ready Express.js + TypeScript API implementing cryptocurrency investment analysis with clean domain-driven architecture, comprehensive testing, and automated CI/CD pipelines.
 
 ### Feature Overview
 
@@ -58,8 +61,8 @@ A production-ready Express.js API implementing cryptocurrency investment analysi
 |:---|:---|:---|:---|
 | Domain-Driven Design | Security Headers (Helmet) | Health Checks | SQLite Database |
 | Repository Pattern | Rate Limiting | Winston Logging | Compression |
-| Service Layer | Input Validation (Joi) | Error Tracking | Response Caching |
-| Clean Separation | CORS Protection | Request Logging | Production Ready |
+| Service Layer | Input Validation (Zod) | Error Tracking | Response Caching |
+| TypeScript Support | CORS Protection | Request Logging | Production Ready |
 
 ### Feature Details
 
@@ -67,7 +70,7 @@ A production-ready Express.js API implementing cryptocurrency investment analysi
 <summary><b>🔒 Security Features</b></summary>
 
 - ✅ **Security Headers**: Helmet middleware with CSP, HSTS, XSS protection
-- ✅ **Input Validation**: Joi schemas for all API endpoints
+- ✅ **Input Validation**: Zod schemas for all API endpoints with TypeScript inference
 - ✅ **Rate Limiting**: Configurable rate limiting per IP
 - ✅ **CORS Protection**: Configurable CORS policies
 - ✅ **JWT Authentication**: Ready-to-use authentication middleware
@@ -82,17 +85,18 @@ A production-ready Express.js API implementing cryptocurrency investment analysi
 - ✅ **Service Layer**: Business logic orchestration
 - ✅ **Function-based Controllers**: Express best practices
 - ✅ **Central Router**: Single registration point
+- ✅ **TypeScript**: Gradual migration with strict mode enabled
 
 </details>
 
 <details>
 <summary><b>🧪 Testing & Quality</b></summary>
 
-- ✅ **Unit Tests**: Jest with 75%+ coverage
+- ✅ **Unit Tests**: Jest with 25%+ coverage (growing)
 - ✅ **Integration Tests**: Supertest for API testing
 - ✅ **E2E Tests**: Playwright for end-to-end scenarios
 - ✅ **Pre-commit Hooks**: Husky + lint-staged
-- ✅ **Code Quality**: ESLint + Prettier
+- ✅ **Code Quality**: ESLint + Prettier + TypeScript
 
 </details>
 
@@ -104,28 +108,33 @@ A production-ready Express.js API implementing cryptocurrency investment analysi
 
 ```
 dwml-backend-express/
-├── src/app/
-│   ├── domain/              # Business domain
-│   │   ├── controllers/     # Request handlers
-│   │   ├── services/        # Business logic
-│   │   ├── repositories/    # Database access
-│   │   ├── routes/          # API routes
-│   │   ├── schemas/         # Validation (Joi)
-│   │   ├── exceptions/      # Domain errors
-│   │   └── constants.js     # Domain constants
-│   ├── shared/              # Shared infrastructure
-│   │   ├── middleware/      # Cross-cutting concerns
-│   │   ├── config/          # Configuration
-│   │   └── utils/           # Utilities
-│   ├── database/            # Database layer
-│   │   ├── sequelize.js     # DB connection
-│   │   └── models/          # Sequelize models
-│   ├── app.js               # Express app
-│   ├── router.js            # Central router
-│   └── server.js            # HTTP server
-├── tests/                   # Test suites
-├── .github/workflows/       # CI/CD
-└── index.js                 # Entry point
+├── src/
+│   ├── app/
+│   │   ├── domain/              # Business domain
+│   │   │   ├── controllers/     # Request handlers
+│   │   │   ├── services/        # Business logic
+│   │   │   ├── repositories/    # Database access
+│   │   │   ├── routes/          # API routes
+│   │   │   ├── schemas/         # Validation (Zod + TypeScript)
+│   │   │   ├── exceptions/      # Domain errors
+│   │   │   ├── types/           # TypeScript types
+│   │   │   └── constants.ts     # Domain constants
+│   │   ├── shared/              # Shared infrastructure
+│   │   │   ├── middleware/      # Cross-cutting concerns
+│   │   │   ├── config/          # Configuration
+│   │   │   └── utils/           # Utilities
+│   │   ├── database/            # Database layer
+│   │   │   ├── sequelize.js     # DB connection
+│   │   │   └── models/          # Sequelize models
+│   │   ├── app.js               # Express app
+│   │   ├── router.js            # Central router
+│   │   └── server.js            # HTTP server
+│   └── types/                   # Global TypeScript types
+├── tests/                       # Test suites
+├── dist/                        # Compiled TypeScript output
+├── .github/workflows/           # CI/CD
+├── tsconfig.json                # TypeScript configuration
+└── index.js                     # Entry point
 ```
 
 ### Architecture Principles
@@ -134,13 +143,14 @@ dwml-backend-express/
 - **Controllers**: Thin request handlers
 - **Services**: Business logic orchestration
 - **Repositories**: Database access abstraction
-- **Schemas**: Request/response validation
-- **Exceptions**: Domain-specific errors
+- **Schemas**: Request/response validation with Zod
+- **Exceptions**: Domain-specific typed errors
+- **Types**: TypeScript interfaces and types
 
 **Shared Infrastructure:**
 - **Middleware**: Auth, CORS, rate limiting, security, validation
-- **Config**: Environment-based configuration
-- **Utils**: Logger, response formatters
+- **Config**: Environment-based configuration (TypeScript)
+- **Utils**: Logger (TypeScript), response formatters
 
 ---
 
@@ -243,11 +253,11 @@ npm run dev
 
 ### Coverage Goals
 
-| Component | Target | Status |
+| Component | Target | Current |
 |:---|:---:|:---:|
-| **Overall** | 75%+ | ✅ |
-| **Services** | 80%+ | ✅ |
-| **Repositories** | 75%+ | ✅ |
+| **Overall** | 75%+ | 27%+ (Growing) |
+| **Services** | 80%+ | 21%+ (Growing) |
+| **Repositories** | 75%+ | 17%+ (Growing) |
 
 ### Running Tests
 
@@ -291,7 +301,7 @@ Automatically runs on every commit:
 | **Feature** | **Implementation** | **Status** |
 |:---|:---|:---:|
 | **Security Headers** | Helmet + custom config | ✅ |
-| **Input Validation** | Joi schemas | ✅ |
+| **Input Validation** | Zod schemas + TypeScript | ✅ |
 | **Rate Limiting** | express-rate-limit | ✅ |
 | **CORS** | Configurable origins | ✅ |
 | **Authentication** | JWT middleware | ✅ |
@@ -344,6 +354,8 @@ make start            # Start production server
 make test             # Run all tests
 make lint             # Lint code
 make format           # Format code
+make typecheck        # TypeScript type checking
+make build            # Build TypeScript to dist/
 make clean            # Clean temp files
 ```
 
@@ -429,53 +441,59 @@ curl "http://localhost:3000/process_request?symbol=ETH&investment=500"
 ### Clean Domain-Driven Architecture
 
 ```
-src/app/
-├── domain/                   # Business domain
-│   ├── controllers/          # Request handlers
-│   │   └── crypto.controller.js
-│   ├── services/             # Business logic
-│   │   ├── crypto-analysis.service.js
-│   │   ├── crypto-cache.service.js
-│   │   ├── crypto-data.service.js
-│   │   └── graph-builder.service.js
-│   ├── repositories/         # Database access
-│   │   ├── crypto-result.repository.js
-│   │   ├── opening-average.repository.js
-│   │   └── query-log.repository.js
-│   ├── routes/               # API routes
-│   │   └── crypto.routes.js
-│   ├── schemas/              # Validation
-│   │   └── crypto.schemas.js
-│   ├── exceptions/           # Domain errors
-│   │   └── crypto.exceptions.js
-│   └── constants.js          # Domain constants
+src/
+├── app/
+│   ├── domain/                      # Business domain
+│   │   ├── controllers/             # Request handlers
+│   │   │   └── crypto.controller.js
+│   │   ├── services/                # Business logic
+│   │   │   ├── crypto-analysis.service.js
+│   │   │   ├── crypto-cache.service.js
+│   │   │   ├── crypto-data.service.js
+│   │   │   └── graph-builder.service.js
+│   │   ├── repositories/            # Database access
+│   │   │   ├── crypto-result.repository.js
+│   │   │   ├── opening-average.repository.js
+│   │   │   └── query-log.repository.js
+│   │   ├── routes/                  # API routes
+│   │   │   └── crypto.routes.js
+│   │   ├── schemas/                 # Validation (TypeScript)
+│   │   │   └── crypto.schemas.ts
+│   │   ├── exceptions/              # Domain errors (TypeScript)
+│   │   │   └── crypto.exceptions.ts
+│   │   ├── types/                   # TypeScript types
+│   │   │   └── crypto.types.ts
+│   │   └── constants.ts             # Domain constants (TypeScript)
+│   │
+│   ├── shared/                      # Shared infrastructure
+│   │   ├── middleware/
+│   │   │   ├── async-handler.middleware.js
+│   │   │   ├── error-handler.middleware.js
+│   │   │   ├── validation.middleware.ts  # TypeScript
+│   │   │   ├── rate-limit.middleware.js
+│   │   │   ├── security.middleware.js
+│   │   │   ├── cors.middleware.js
+│   │   │   ├── health.middleware.js
+│   │   │   └── auth.middleware.js
+│   │   ├── config/
+│   │   │   └── app.config.ts        # TypeScript
+│   │   └── utils/
+│   │       ├── logger.ts            # TypeScript
+│   │       └── response.util.js
+│   │
+│   ├── database/                    # Database layer
+│   │   ├── sequelize.js
+│   │   └── models/
+│   │       ├── result.model.js
+│   │       ├── opening-average.model.js
+│   │       └── query-log.model.js
+│   │
+│   ├── app.js                       # Express app factory
+│   ├── router.js                    # Central router
+│   └── server.js                    # HTTP server
 │
-├── shared/                   # Shared infrastructure
-│   ├── middleware/
-│   │   ├── async-handler.middleware.js
-│   │   ├── error-handler.middleware.js
-│   │   ├── validation.middleware.js
-│   │   ├── rate-limit.middleware.js
-│   │   ├── security.middleware.js
-│   │   ├── cors.middleware.js
-│   │   ├── health.middleware.js
-│   │   └── auth.middleware.js
-│   ├── config/
-│   │   └── app.config.js
-│   └── utils/
-│       ├── logger.js
-│       └── response.util.js
-│
-├── database/                 # Database layer
-│   ├── sequelize.js
-│   └── models/
-│       ├── result.model.js
-│       ├── opening-average.model.js
-│       └── query-log.model.js
-│
-├── app.js                    # Express app factory
-├── router.js                 # Central router
-└── server.js                 # HTTP server
+└── types/                           # Global TypeScript types
+    └── index.ts
 ```
 
 ---
@@ -599,10 +617,11 @@ npm test tests/unit/services/crypto-analysis.service.test.js
 
 ### Code Standards
 
-- ✅ ESLint (Airbnb style guide)
+- ✅ ESLint (Airbnb + TypeScript style guide)
 - ✅ Prettier formatting
-- ✅ 75%+ test coverage
-- ✅ JSDoc comments
+- ✅ TypeScript strict mode enabled
+- ✅ 25%+ test coverage (growing to 75%)
+- ✅ JSDoc/TSDoc comments
 - ✅ Meaningful commit messages
 
 ---
@@ -612,9 +631,3 @@ npm test tests/unit/services/crypto-analysis.service.test.js
 MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
-
-<div align="center">
-
-**Built with ❤️ using Express.js**
-
-</div>
