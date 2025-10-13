@@ -4,16 +4,16 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import compression from 'compression';
-import router from './router';
+import router from './router.js';
 import {
   errorHandler,
   notFoundHandler,
-} from './shared/middleware/error-handler.middleware';
-import { securityMiddleware } from './shared/middleware/security.middleware';
-import { apiLimiter } from './shared/middleware/rate-limit.middleware';
-import { corsOptions } from './shared/middleware/cors.middleware';
-import { morganStream } from './shared/utils/logger';
-import config from './shared/config/app.config';
+} from './shared/middleware/error-handler.middleware.js';
+import { securityMiddleware } from './shared/middleware/security.middleware.js';
+import { apiLimiter } from './shared/middleware/rate-limit.middleware.js';
+import { corsOptions } from './shared/middleware/cors.middleware.js';
+import { morganStream } from './shared/utils/logger.js';
+import config from './shared/config/app.config.js';
 
 /**
  * Create and configure Express application

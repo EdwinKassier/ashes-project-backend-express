@@ -1,12 +1,12 @@
 // @ts-nocheck
 import * as dataForge from 'data-forge';
-import config from '../../shared/config/app.config';
-import { logger } from '../../shared/utils/logger';
+import config from '../../shared/config/app.config.js';
+import { logger } from '../../shared/utils/logger.js';
 import {
   ExternalAPIException,
   DataProcessingException,
-} from '../exceptions/crypto.exceptions';
-import { CRYPTO_CONSTANTS } from '../constants';
+} from '../exceptions/crypto.exceptions.js';
+import { CRYPTO_CONSTANTS } from '../constants.js';
 
 /**
  * Service for fetching and processing cryptocurrency data from external APIs

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Router } from 'express';
-import cryptoRoutes from './domain/routes/crypto.routes';
-import { healthCheck, readinessCheck } from './shared/middleware/health.middleware';
+import cryptoRoutes from './domain/routes/crypto.routes.js';
+import { healthCheck, readinessCheck } from './shared/middleware/health.middleware.js';
 
 const router = Router();
 

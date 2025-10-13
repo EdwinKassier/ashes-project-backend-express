@@ -1,7 +1,7 @@
 import type { ModelStatic } from 'sequelize';
-import { getSequelize } from '../../database/sequelize';
-import { logger } from '../../shared/utils/logger';
-import type OpeningAverage from '../../database/models/opening-average.model';
+import { getSequelize } from '../../database/sequelize.js';
+import { logger } from '../../shared/utils/logger.js';
+import type OpeningAverage from '../../database/models/opening-average.model.js';
 
 /**
  * Repository for opening average data

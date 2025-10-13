@@ -1,9 +1,9 @@
 import { Sequelize, type ModelStatic, type Model } from 'sequelize';
-import config from '../shared/config/app.config';
-import { logger } from '../shared/utils/logger';
-import Result from './models/result.model';
-import OpeningAverage from './models/opening-average.model';
-import QueryLog from './models/query-log.model';
+import config from '../shared/config/app.config.js';
+import { logger } from '../shared/utils/logger.js';
+import Result from './models/result.model.js';
+import OpeningAverage from './models/opening-average.model.js';
+import QueryLog from './models/query-log.model.js';
 
 let sequelize: Sequelize | null = null;
 

@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
-import cryptoAnalysisService from '../services/crypto-analysis.service';
-import graphBuilderService from '../services/graph-builder.service';
-import { successResponse } from '../../shared/utils/response.util';
-import { logger } from '../../shared/utils/logger';
+import cryptoAnalysisService from '../services/crypto-analysis.service.js';
+import graphBuilderService from '../services/graph-builder.service.js';
+import { successResponse } from '../../shared/utils/response.util.js';
+import { logger } from '../../shared/utils/logger.js';
 
 /**
  * Analyze cryptocurrency investment

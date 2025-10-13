@@ -1,8 +1,8 @@
 // @ts-nocheck
-import cryptoResultRepository from '../repositories/crypto-result.repository';
-import openingAverageRepository from '../repositories/opening-average.repository';
-import queryLogRepository from '../repositories/query-log.repository';
-import { logger } from '../../shared/utils/logger';
+import cryptoResultRepository from '../repositories/crypto-result.repository.js';
+import openingAverageRepository from '../repositories/opening-average.repository.js';
+import queryLogRepository from '../repositories/query-log.repository.js';
+import { logger } from '../../shared/utils/logger.js';
 
 /**
  * Service for caching cryptocurrency data

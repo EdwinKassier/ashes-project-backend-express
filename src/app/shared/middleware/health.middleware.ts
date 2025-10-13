@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { getSequelize } from '../../database/sequelize';
-import config from '../config/app.config';
+import { getSequelize } from '../../database/sequelize.js';
+import config from '../config/app.config.js';
 
 /**
  * Health check endpoint

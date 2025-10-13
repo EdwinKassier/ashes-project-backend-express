@@ -1,6 +1,6 @@
 // @ts-nocheck
 import jwt from 'jsonwebtoken';
-import config from '../config/app.config';
+import config from '../config/app.config.js';
 
 /**
  * Verify JWT token middleware

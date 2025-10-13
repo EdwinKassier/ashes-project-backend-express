@@ -1,7 +1,7 @@
 import type { ModelStatic } from 'sequelize';
-import { getSequelize } from '../../database/sequelize';
-import { logger } from '../../shared/utils/logger';
-import type Result from '../../database/models/result.model';
+import { getSequelize } from '../../database/sequelize.js';
+import { logger } from '../../shared/utils/logger.js';
+import type Result from '../../database/models/result.model.js';
 
 interface ResultData {
   symbol: string;

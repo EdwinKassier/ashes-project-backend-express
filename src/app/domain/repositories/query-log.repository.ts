@@ -1,7 +1,7 @@
 import type { ModelStatic } from 'sequelize';
-import { getSequelize } from '../../database/sequelize';
-import { logger } from '../../shared/utils/logger';
-import type QueryLog from '../../database/models/query-log.model';
+import { getSequelize } from '../../database/sequelize.js';
+import { logger } from '../../shared/utils/logger.js';
+import type QueryLog from '../../database/models/query-log.model.js';
 
 interface QueryStats {
   totalQueries: number;

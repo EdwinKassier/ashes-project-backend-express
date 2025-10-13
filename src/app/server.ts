@@ -1,9 +1,9 @@
 // @ts-nocheck
 import http from 'http';
-import { createApp } from './app';
-import { initDatabase, closeDatabase } from './database/sequelize';
-import { logger } from './shared/utils/logger';
-import config from './shared/config/app.config';
+import { createApp } from './app.js';
+import { initDatabase, closeDatabase } from './database/sequelize.js';
+import { logger } from './shared/utils/logger.js';
+import config from './shared/config/app.config.js';
 
 let server;
 
