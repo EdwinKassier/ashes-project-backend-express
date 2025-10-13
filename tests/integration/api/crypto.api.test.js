@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { createApp } from '../../../src/app/app.js';
-import { initDatabase, closeDatabase } from '../../../src/app/database/sequelize.js';
+import { createApp } from '../../../src/app/app';
+import { initDatabase, closeDatabase } from '../../../src/app/database/sequelize';
 
 describe('Crypto API Integration Tests', () => {
   let app;

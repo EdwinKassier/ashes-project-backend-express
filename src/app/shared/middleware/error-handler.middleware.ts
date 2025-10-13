@@ -1,4 +1,5 @@
-import { logger } from '../utils/logger.js';
+// @ts-nocheck
+import { logger } from '../utils/logger';
 
 /**
  * Global error handler

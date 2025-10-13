@@ -1,8 +1,32 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, type Sequelize } from 'sequelize';
 
-class OpeningAverage extends Model {
-  static init(sequelize) {
-    super.init(
+interface OpeningAverageAttributes {
+  id?: number;
+  symbol: string;
+  average: number;
+  generationDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+class OpeningAverage
+  extends Model<OpeningAverageAttributes>
+  implements OpeningAverageAttributes
+{
+  declare id: number;
+
+  declare symbol: string;
+
+  declare average: number;
+
+  declare generationDate: Date;
+
+  declare readonly createdAt: Date;
+
+  declare readonly updatedAt: Date;
+
+  static initModel(sequelize: Sequelize): typeof OpeningAverage {
+    OpeningAverage.init(
       {
         id: {
           type: DataTypes.INTEGER,

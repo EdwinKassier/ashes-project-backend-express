@@ -4,12 +4,12 @@ import {
   getGraphData,
   processRequest,
   home,
-} from '../controllers/crypto.controller.js';
+} from '../controllers/crypto.controller';
 import {
   validateQuery,
   validateParams,
-} from '../../shared/middleware/validation.middleware.js';
-import { cryptoAnalysisSchema, symbolParamSchema } from '../schemas/crypto.schemas.js';
+} from '../../shared/middleware/validation.middleware';
+import { cryptoAnalysisSchema, symbolParamSchema } from '../schemas/crypto.schemas';
 
 const router = Router();
 

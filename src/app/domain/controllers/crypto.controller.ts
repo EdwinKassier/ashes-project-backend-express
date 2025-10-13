@@ -1,21 +1,26 @@
-import cryptoAnalysisService from '../services/crypto-analysis.service.js';
-import graphBuilderService from '../services/graph-builder.service.js';
-import { successResponse } from '../../shared/utils/response.util.js';
-import { logger } from '../../shared/utils/logger.js';
+import type { Request, Response, NextFunction } from 'express';
+import cryptoAnalysisService from '../services/crypto-analysis.service';
+import graphBuilderService from '../services/graph-builder.service';
+import { successResponse } from '../../shared/utils/response.util';
+import { logger } from '../../shared/utils/logger';
 
 /**
  * Analyze cryptocurrency investment
  * @route GET /api/v1/crypto/analysis
  */
-export const analyzeCrypto = async (req, res, next) => {
+export const analyzeCrypto = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const { symbol, investment } = req.query;
 
     logger.info('Processing crypto analysis request', { symbol, investment });
 
     const result = await cryptoAnalysisService.analyzeCrypto(
-      symbol,
-      parseFloat(investment)
+      symbol as string,
+      parseFloat(investment as string)
     );
 
     return successResponse(res, result, 'Analysis completed successfully');
@@ -28,7 +33,11 @@ export const analyzeCrypto = async (req, res, next) => {
  * Get graph data for cryptocurrency
  * @route GET /api/v1/crypto/graph/:symbol
  */
-export const getGraphData = async (req, res, next) => {
+export const getGraphData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const { symbol } = req.params;
 
@@ -47,7 +56,11 @@ export const getGraphData = async (req, res, next) => {
  * @route GET /process_request
  */
 // eslint-disable-next-line @typescript-eslint/require-await, no-unused-vars
-export const processRequest = async (req, res, _next) => {
+export const processRequest = async (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+): Promise<Response> => {
   try {
     const { symbol, investment } = req.query;
 
@@ -59,7 +72,11 @@ export const processRequest = async (req, res, _next) => {
       });
     }
 
-    if (!investment || investment === '' || Number.isNaN(parseFloat(investment))) {
+    if (
+      !investment ||
+      (investment as string) === '' ||
+      Number.isNaN(parseFloat(investment as string))
+    ) {
       return res.status(200).json({
         result: 'Invalid investment amount',
         graph_data: 'Invalid investment amount',
@@ -68,10 +85,10 @@ export const processRequest = async (req, res, _next) => {
 
     // Process the request using the new service
     const result = await cryptoAnalysisService.analyzeCrypto(
-      symbol,
-      parseFloat(investment)
+      symbol as string,
+      parseFloat(investment as string)
     );
-    const graphData = await graphBuilderService.buildGraphData(symbol);
+    const graphData = await graphBuilderService.buildGraphData(symbol as string);
 
     return res.status(200).json({
       result,
@@ -91,7 +108,7 @@ export const processRequest = async (req, res, _next) => {
  * @route GET /
  */
 // eslint-disable-next-line @typescript-eslint/require-await
-export const home = async (req, res) =>
+export const home = async (_req: Request, res: Response): Promise<Response> =>
   res.status(200).json({
     result: 'Express server is running',
     status: true,

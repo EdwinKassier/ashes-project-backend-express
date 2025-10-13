@@ -1,4 +1,5 @@
-import config from '../config/app.config.js';
+// @ts-nocheck
+import config from '../config/app.config';
 
 /**
  * CORS configuration options

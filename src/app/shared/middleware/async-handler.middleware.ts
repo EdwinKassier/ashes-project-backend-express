@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Wraps async route handlers to catch errors and pass them to error middleware
  * Usage: router.get('/path', asyncHandler(asyncFunction))

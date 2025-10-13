@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import config from '../config/app.config.js';
+import config from '../config/app.config';
 
 /**
  * API rate limiter

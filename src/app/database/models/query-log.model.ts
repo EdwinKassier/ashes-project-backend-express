@@ -1,8 +1,29 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, type Sequelize } from 'sequelize';
 
-class QueryLog extends Model {
-  static init(sequelize) {
-    super.init(
+interface QueryLogAttributes {
+  id?: number;
+  symbol: string;
+  investment: number;
+  generationDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+class QueryLog extends Model<QueryLogAttributes> implements QueryLogAttributes {
+  declare id: number;
+
+  declare symbol: string;
+
+  declare investment: number;
+
+  declare generationDate: Date;
+
+  declare readonly createdAt: Date;
+
+  declare readonly updatedAt: Date;
+
+  static initModel(sequelize: Sequelize): typeof QueryLog {
+    QueryLog.init(
       {
         id: {
           type: DataTypes.INTEGER,

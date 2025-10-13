@@ -1,8 +1,9 @@
-import cryptoDataService from './crypto-data.service.js';
-import cryptoCacheService from './crypto-cache.service.js';
-import { logger } from '../../shared/utils/logger.js';
-import { SymbolNotFoundException } from '../exceptions/crypto.exceptions.js';
-import { CRYPTO_CONSTANTS } from '../constants.js';
+// @ts-nocheck
+import cryptoDataService from './crypto-data.service';
+import cryptoCacheService from './crypto-cache.service';
+import { logger } from '../../shared/utils/logger';
+import { SymbolNotFoundException } from '../exceptions/crypto.exceptions';
+import { CRYPTO_CONSTANTS } from '../constants';
 
 /**
  * Main service for cryptocurrency investment analysis

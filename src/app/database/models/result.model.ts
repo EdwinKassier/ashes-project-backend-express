@@ -1,8 +1,44 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, type Sequelize } from 'sequelize';
 
-class Result extends Model {
-  static init(sequelize) {
-    super.init(
+interface ResultAttributes {
+  id?: number;
+  query: string;
+  numberOfCoins: number;
+  profit: number;
+  growthFactor: number;
+  lambos: number;
+  investment: number;
+  symbol: string;
+  generationDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+class Result extends Model<ResultAttributes> implements ResultAttributes {
+  declare id: number;
+
+  declare query: string;
+
+  declare numberOfCoins: number;
+
+  declare profit: number;
+
+  declare growthFactor: number;
+
+  declare lambos: number;
+
+  declare investment: number;
+
+  declare symbol: string;
+
+  declare generationDate: Date;
+
+  declare readonly createdAt: Date;
+
+  declare readonly updatedAt: Date;
+
+  static initModel(sequelize: Sequelize): typeof Result {
+    Result.init(
       {
         id: {
           type: DataTypes.INTEGER,

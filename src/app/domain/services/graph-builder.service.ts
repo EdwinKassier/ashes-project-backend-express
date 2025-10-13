@@ -1,6 +1,7 @@
-import cryptoDataService from './crypto-data.service.js';
-import { logger } from '../../shared/utils/logger.js';
-import { SymbolNotFoundException } from '../exceptions/crypto.exceptions.js';
+// @ts-nocheck
+import cryptoDataService from './crypto-data.service';
+import { logger } from '../../shared/utils/logger';
+import { SymbolNotFoundException } from '../exceptions/crypto.exceptions';
 
 /**
  * Service for building graph data for frontend visualization

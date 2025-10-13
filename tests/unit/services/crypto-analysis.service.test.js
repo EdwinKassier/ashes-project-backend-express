@@ -1,4 +1,4 @@
-import { CryptoAnalysisService } from '../../../src/app/domain/services/crypto-analysis.service.js';
+import { CryptoAnalysisService } from '../../../src/app/domain/services/crypto-analysis.service';
 
 describe('CryptoAnalysisService', () => {
   let service;
