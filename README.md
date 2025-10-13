@@ -81,22 +81,22 @@ A production-ready Express.js + TypeScript API implementing cryptocurrency inves
 <summary><b>🏗️ Architecture</b></summary>
 
 - ✅ **Domain-Driven Design**: Complete vertical slice ownership
-- ✅ **Repository Pattern**: Clean database access layer
+- ✅ **Repository Pattern**: Clean database access layer with TypeScript types
 - ✅ **Service Layer**: Business logic orchestration
-- ✅ **Function-based Controllers**: Express best practices
+- ✅ **Function-based Controllers**: Express best practices with type safety
 - ✅ **Central Router**: Single registration point
-- ✅ **TypeScript**: Gradual migration with strict mode enabled
+- ✅ **TypeScript**: Full migration complete with strict mode enabled
 
 </details>
 
 <details>
 <summary><b>🧪 Testing & Quality</b></summary>
 
-- ✅ **Unit Tests**: Jest with 25%+ coverage (growing)
+- ✅ **Unit Tests**: Jest with TypeScript support, 23%+ coverage (growing to 75%)
 - ✅ **Integration Tests**: Supertest for API testing
 - ✅ **E2E Tests**: Playwright for end-to-end scenarios
-- ✅ **Pre-commit Hooks**: Husky + lint-staged
-- ✅ **Code Quality**: ESLint + Prettier + TypeScript
+- ✅ **Pre-commit Hooks**: Husky + lint-staged with TypeScript validation
+- ✅ **Code Quality**: ESLint (TypeScript rules) + Prettier + Type checking
 
 </details>
 
@@ -201,12 +201,18 @@ DB_PATH=./data/database.sqlite
 ALLOWED_ORIGINS=http://localhost:3000
 ```
 
-#### 4. Start Development Server
+#### 4. Build TypeScript (First Time)
+
+```bash
+npm run build
+```
+
+#### 5. Start Development Server
 
 ```bash
 make dev
 # OR
-npm run dev
+npm run start:dev  # TypeScript with hot reload
 ```
 
 The API will be available at: **http://localhost:3000**
@@ -234,7 +240,8 @@ docker-compose logs -f app  # View logs
 ```bash
 npm install
 npx husky install
-npm run dev
+npm run build          # Compile TypeScript
+npm run start:dev      # Start with hot reload
 ```
 
 ---
@@ -255,7 +262,7 @@ npm run dev
 
 | Component | Target | Current |
 |:---|:---:|:---:|
-| **Overall** | 75%+ | 27%+ (Growing) |
+| **Overall** | 75%+ | 23%+ (Growing) |
 | **Services** | 80%+ | 21%+ (Growing) |
 | **Repositories** | 75%+ | 17%+ (Growing) |
 
@@ -445,18 +452,18 @@ src/
 ├── app/
 │   ├── domain/                      # Business domain
 │   │   ├── controllers/             # Request handlers
-│   │   │   └── crypto.controller.js
+│   │   │   └── crypto.controller.ts
 │   │   ├── services/                # Business logic
-│   │   │   ├── crypto-analysis.service.js
-│   │   │   ├── crypto-cache.service.js
-│   │   │   ├── crypto-data.service.js
-│   │   │   └── graph-builder.service.js
+│   │   │   ├── crypto-analysis.service.ts
+│   │   │   ├── crypto-cache.service.ts
+│   │   │   ├── crypto-data.service.ts
+│   │   │   └── graph-builder.service.ts
 │   │   ├── repositories/            # Database access
-│   │   │   ├── crypto-result.repository.js
-│   │   │   ├── opening-average.repository.js
-│   │   │   └── query-log.repository.js
+│   │   │   ├── crypto-result.repository.ts
+│   │   │   ├── opening-average.repository.ts
+│   │   │   └── query-log.repository.ts
 │   │   ├── routes/                  # API routes
-│   │   │   └── crypto.routes.js
+│   │   │   └── crypto.routes.ts
 │   │   ├── schemas/                 # Validation (TypeScript)
 │   │   │   └── crypto.schemas.ts
 │   │   ├── exceptions/              # Domain errors (TypeScript)
@@ -467,30 +474,30 @@ src/
 │   │
 │   ├── shared/                      # Shared infrastructure
 │   │   ├── middleware/
-│   │   │   ├── async-handler.middleware.js
-│   │   │   ├── error-handler.middleware.js
-│   │   │   ├── validation.middleware.ts  # TypeScript
-│   │   │   ├── rate-limit.middleware.js
-│   │   │   ├── security.middleware.js
-│   │   │   ├── cors.middleware.js
-│   │   │   ├── health.middleware.js
-│   │   │   └── auth.middleware.js
+│   │   │   ├── async-handler.middleware.ts
+│   │   │   ├── error-handler.middleware.ts
+│   │   │   ├── validation.middleware.ts
+│   │   │   ├── rate-limit.middleware.ts
+│   │   │   ├── security.middleware.ts
+│   │   │   ├── cors.middleware.ts
+│   │   │   ├── health.middleware.ts
+│   │   │   └── auth.middleware.ts
 │   │   ├── config/
 │   │   │   └── app.config.ts        # TypeScript
 │   │   └── utils/
 │   │       ├── logger.ts            # TypeScript
-│   │       └── response.util.js
+│   │       └── response.util.ts
 │   │
-│   ├── database/                    # Database layer
-│   │   ├── sequelize.js
+│   ├── database/                    # Database layer (TypeScript)
+│   │   ├── sequelize.ts
 │   │   └── models/
-│   │       ├── result.model.js
-│   │       ├── opening-average.model.js
-│   │       └── query-log.model.js
+│   │       ├── result.model.ts
+│   │       ├── opening-average.model.ts
+│   │       └── query-log.model.ts
 │   │
-│   ├── app.js                       # Express app factory
-│   ├── router.js                    # Central router
-│   └── server.js                    # HTTP server
+│   ├── app.ts                       # Express app factory (TypeScript)
+│   ├── router.ts                    # Central router (TypeScript)
+│   └── server.ts                    # HTTP server (TypeScript)
 │
 └── types/                           # Global TypeScript types
     └── index.ts
@@ -619,10 +626,11 @@ npm test tests/unit/services/crypto-analysis.service.test.js
 
 - ✅ ESLint (Airbnb + TypeScript style guide)
 - ✅ Prettier formatting
-- ✅ TypeScript strict mode enabled
-- ✅ 25%+ test coverage (growing to 75%)
+- ✅ TypeScript strict mode enabled (all files migrated)
+- ✅ 23%+ test coverage (growing to 75%)
 - ✅ JSDoc/TSDoc comments
 - ✅ Meaningful commit messages
+- ✅ Type-safe imports with path aliases
 
 ---
 
