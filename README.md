@@ -501,7 +501,17 @@ src/
 │
 └── types/                           # Global TypeScript types
     └── index.ts
+
+tests/                               # Test suites (JavaScript)
+├── unit/                            # Unit tests
+├── integration/                     # Integration tests
+└── e2e/                             # E2E tests (Playwright)
+
+dist/                                # TypeScript build output
+index.ts                             # Application entry point (TypeScript)
 ```
+
+**Note**: All application source files (32 files) are TypeScript. Test files remain JavaScript for now.
 
 ---
 
