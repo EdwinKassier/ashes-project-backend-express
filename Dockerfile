@@ -10,8 +10,10 @@ COPY package*.json ./
 # Install ALL dependencies (including TypeScript and dev deps for building)
 RUN npm ci && npm cache clean --force
 
-# Copy application code
-COPY . .
+# Copy TypeScript configuration and source code
+COPY tsconfig*.json ./
+COPY index.ts ./
+COPY src ./src
 
 # Build TypeScript to dist/
 RUN npm run build
@@ -32,15 +34,11 @@ COPY package*.json ./
 # Install production dependencies only
 RUN npm ci --production && npm cache clean --force
 
-# Copy source files (JavaScript files that aren't converted yet)
+# Copy built JavaScript files from builder
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+
+# Copy source files (needed for imports that haven't been fully migrated)
 COPY --from=builder --chown=nodejs:nodejs /app/src ./src
-
-# Copy compiled TypeScript files from dist/src to src/ (merge them)
-# This ensures imports like './shared/utils/logger.js' work
-COPY --from=builder --chown=nodejs:nodejs /app/dist/src/. ./src/
-
-# Copy entry point
-COPY --chown=nodejs:nodejs index.js ./
 
 # Create logs and data directories
 RUN mkdir -p logs data && chown -R nodejs:nodejs logs data
@@ -55,5 +53,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start application
-CMD ["node", "index.js"]
+# Start application (using compiled TypeScript)
+CMD ["node", "dist/index.js"]
