@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { startServer } from './src/app/server';
+import { startServer } from './src/app/server.js';
 
 // Load environment variables
 dotenv.config();
