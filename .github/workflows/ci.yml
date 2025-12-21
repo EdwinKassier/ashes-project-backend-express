@@ -159,10 +159,14 @@ jobs:
     if: github.event_name == 'create' && startsWith(github.ref, 'refs/tags/prod/v')
     needs: [quality, test, security]
     timeout-minutes: 30
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+# ... (intermediate steps skipped for brevity in tool call, will use sed/replace to target specific blocks)
+# Actually replace_file_content needs strict matching. I will update the job definition start and the release step separately.
 
       - name: Verify tag deployment
         run: |
@@ -281,12 +285,9 @@ jobs:
           fi
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Production Release ${{ steps.extract_version.outputs.VERSION }}
+          name: Production Release ${{ steps.extract_version.outputs.VERSION }}
           body: |
             ## Production Release ${{ steps.extract_version.outputs.VERSION }}
 
