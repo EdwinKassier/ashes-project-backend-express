@@ -141,14 +141,14 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run -d -p 3000:3000 \
+          docker run -d -p 8080:8080 \
             -e JWT_SECRET=test-secret-for-ci-${{ github.sha }} \
             -e NODE_ENV=production \
-            -e ALLOWED_ORIGINS=http://localhost:3000 \
+            -e ALLOWED_ORIGINS=http://localhost:8080 \
             --name test-container \
             dwml-backend-express:${{ github.sha }}
           sleep 15
-          curl -f http://localhost:3000/health || exit 1
+          curl -f http://localhost:8080/health || exit 1
           docker stop test-container
           docker rm test-container
 
