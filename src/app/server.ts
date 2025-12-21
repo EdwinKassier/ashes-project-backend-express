@@ -77,9 +77,9 @@ export async function startServer() {
 
     // Start listening
     await new Promise((resolve, reject) => {
-      server.listen(config.port, (err) => {
+      server.listen(config.port, '0.0.0.0', (err) => {
         if (err) reject(err);
-        else resolve();
+        else resolve(true);
       });
     });
 
