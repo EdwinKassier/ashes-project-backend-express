@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as dataForge from 'data-forge';
 import config from '../../shared/config/app.config.js';
 import { logger } from '../../shared/utils/logger.js';
@@ -9,17 +8,41 @@ import {
 import { CRYPTO_CONSTANTS } from '../constants.js';
 
 /**
+ * Price data point from processed OHLC data
+ */
+export interface PriceDataPoint {
+  closeTime: string;
+  closePrice: number;
+}
+
+/**
+ * Kraken API response structure
+ */
+interface KrakenApiResponse {
+  error: string[];
+  result: Record<string, unknown[][]>;
+}
+
+/**
+ * DataFrame row structure after processing
+ */
+interface DataFrameRow {
+  CloseTime: string;
+  ClosePrice: number;
+}
+
+/**
  * Service for fetching and processing cryptocurrency data from external APIs
  */
 export class CryptoDataService {
   /**
    * Check if symbol exists on Kraken exchange
    */
-  async checkSymbolExists(symbol) {
+  async checkSymbolExists(symbol: string): Promise<boolean> {
     try {
       const url = `${config.krakenApiUrl}/OHLC?pair=${symbol}USD&interval=21600&since=1548111600`;
       const response = await fetch(url);
-      const data = await response.json();
+      const data = (await response.json()) as KrakenApiResponse;
 
       if (data.error && data.error.length > 0) {
         logger.debug('Symbol check failed', { symbol, error: data.error });
@@ -30,20 +53,23 @@ export class CryptoDataService {
     } catch (error) {
       logger.error('Error checking symbol existence', {
         symbol,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      throw new ExternalAPIException('Failed to check symbol', error);
+      throw new ExternalAPIException(
+        'Failed to check symbol',
+        error instanceof Error ? error : null
+      );
     }
   }
 
   /**
    * Fetch historical data for symbol
    */
-  async fetchHistoricalData(symbol) {
+  async fetchHistoricalData(symbol: string): Promise<PriceDataPoint[]> {
     try {
       const url = `${config.krakenApiUrl}/OHLC?pair=${symbol}USD&interval=21600&since=1548111600`;
       const response = await fetch(url);
-      const data = await response.json();
+      const data = (await response.json()) as KrakenApiResponse;
 
       if (!response.ok || (data.error && data.error.length > 0)) {
         throw new Error(data.error?.join(', ') || 'API request failed');
@@ -53,11 +79,11 @@ export class CryptoDataService {
     } catch (error) {
       logger.error('Error fetching historical data', {
         symbol,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw new ExternalAPIException(
         `Failed to fetch historical data for ${symbol}`,
-        error
+        error instanceof Error ? error : null
       );
     }
   }
@@ -65,11 +91,11 @@ export class CryptoDataService {
   /**
    * Fetch current price data
    */
-  async fetchCurrentData(symbol) {
+  async fetchCurrentData(symbol: string): Promise<PriceDataPoint[]> {
     try {
       const url = `${config.krakenApiUrl}/OHLC?pair=${symbol}USD&interval=21600&since=1548111600`;
       const response = await fetch(url);
-      const data = await response.json();
+      const data = (await response.json()) as KrakenApiResponse;
 
       if (!response.ok || (data.error && data.error.length > 0)) {
         throw new Error(data.error?.join(', ') || 'API request failed');
@@ -79,11 +105,11 @@ export class CryptoDataService {
     } catch (error) {
       logger.error('Error fetching current data', {
         symbol,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw new ExternalAPIException(
         `Failed to fetch current data for ${symbol}`,
-        error
+        error instanceof Error ? error : null
       );
     }
   }
@@ -91,7 +117,7 @@ export class CryptoDataService {
   /**
    * Convert API response to data frame
    */
-  convertToDataFrame(apiResponse) {
+  convertToDataFrame(apiResponse: KrakenApiResponse): PriceDataPoint[] {
     try {
       // Find the key that contains USD
       const usdKey = Object.keys(apiResponse.result).find((key) => key.includes('USD'));
@@ -101,9 +127,11 @@ export class CryptoDataService {
       }
 
       const targetData = apiResponse.result[usdKey];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const df = new dataForge.DataFrame(targetData);
 
       // Rename columns
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const renamedDf = df.renameSeries({
         0: CRYPTO_CONSTANTS.DATAFRAME_COLUMNS.CLOSE_TIME,
         1: CRYPTO_CONSTANTS.DATAFRAME_COLUMNS.OPEN_PRICE,
@@ -116,13 +144,17 @@ export class CryptoDataService {
       });
 
       // Generate proper dates and parse prices
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const processedDf = renamedDf.generateSeries({
-        CloseTime: (row) => new Date(parseInt(row.CloseTime, 10) * 1000).toISOString(),
-        ClosePrice: (row) => parseFloat(row.ClosePrice),
+        CloseTime: (row: Record<string, string>) =>
+          new Date(parseInt(row.CloseTime, 10) * 1000).toISOString(),
+        ClosePrice: (row: Record<string, string>) => parseFloat(row.ClosePrice),
       });
 
       // Convert to array of objects for easier manipulation
-      const dataArray = processedDf.toArray().map((row) => ({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const rawArray = processedDf.toArray() as unknown as DataFrameRow[];
+      const dataArray: PriceDataPoint[] = rawArray.map((row) => ({
         closeTime: row.CloseTime,
         closePrice: row.ClosePrice,
       }));
@@ -130,10 +162,10 @@ export class CryptoDataService {
       return dataArray;
     } catch (error) {
       logger.error('Error converting data to DataFrame', {
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw new DataProcessingException(
-        `Failed to process market data: ${error.message}`
+        `Failed to process market data: ${error instanceof Error ? error.message : String(error)}`
       );
     }
   }
@@ -141,7 +173,7 @@ export class CryptoDataService {
   /**
    * Calculate average price from data array
    */
-  calculateAverage(dataArray) {
+  calculateAverage(dataArray: PriceDataPoint[]): number {
     if (!dataArray || dataArray.length === 0) {
       throw new DataProcessingException('No data to calculate average');
     }

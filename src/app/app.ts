@@ -1,4 +1,4 @@
-// @ts-nocheck
+import type { Application } from 'express';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -18,7 +18,7 @@ import config from './shared/config/app.config.js';
 /**
  * Create and configure Express application
  */
-export function createApp() {
+export function createApp(): Application {
   const app = express();
 
   // 1. SECURITY - First (before any other middleware)

@@ -6,6 +6,7 @@ export interface CryptoAnalysisData {
   profit: number;
   growthFactor: number;
   lambos: number;
+  generatedAt?: string;
 }
 
 export interface OpeningAverageData {

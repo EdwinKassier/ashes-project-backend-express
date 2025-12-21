@@ -1,21 +1,24 @@
-// @ts-nocheck
 import cryptoDataService from './crypto-data.service.js';
 import cryptoCacheService from './crypto-cache.service.js';
 import { logger } from '../../shared/utils/logger.js';
 import { SymbolNotFoundException } from '../exceptions/crypto.exceptions.js';
 import { CRYPTO_CONSTANTS } from '../constants.js';
+import type {
+  CryptoAnalysisData,
+  ICryptoAnalysisService,
+} from '../types/crypto.types.js';
 
 /**
  * Main service for cryptocurrency investment analysis
  */
-export class CryptoAnalysisService {
+export class CryptoAnalysisService implements ICryptoAnalysisService {
   /**
    * Analyze cryptocurrency investment returns
-   * @param {string} symbol - Cryptocurrency symbol
-   * @param {number} investment - Investment amount
-   * @returns {Promise<Object>} Analysis result
+   * @param symbol - Cryptocurrency symbol
+   * @param investment - Investment amount
+   * @returns Analysis result with profit calculations
    */
-  async analyzeCrypto(symbol, investment) {
+  async analyzeCrypto(symbol: string, investment: number): Promise<CryptoAnalysisData> {
     try {
       // Log the query for analytics
       await cryptoCacheService.logQuery(symbol, investment);
@@ -29,13 +32,13 @@ export class CryptoAnalysisService {
       logger.info('Starting crypto analysis', { symbol, investment });
 
       // Get or calculate opening average price
-      let averageStartPrice;
+      let averageStartPrice: number;
       const hasCache = await cryptoCacheService.hasOpeningAverage(symbol);
 
       if (hasCache) {
         logger.debug('Using cached opening average', { symbol });
         const cachedAverage = await cryptoCacheService.getOpeningAverage(symbol);
-        averageStartPrice = cachedAverage.average;
+        averageStartPrice = cachedAverage?.average ?? 0;
       } else {
         logger.debug('Calculating new opening average', { symbol });
         const historicalData = await cryptoDataService.fetchHistoricalData(symbol);
@@ -77,7 +80,7 @@ export class CryptoAnalysisService {
       logger.error('Error analyzing crypto', {
         symbol,
         investment,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }
@@ -87,7 +90,12 @@ export class CryptoAnalysisService {
    * Calculate investment return metrics
    * @private
    */
-  calculateInvestmentReturn(investment, startPrice, endPrice, symbol) {
+  calculateInvestmentReturn(
+    investment: number,
+    startPrice: number,
+    endPrice: number,
+    symbol: string
+  ): CryptoAnalysisData {
     const numberOfCoins = investment / startPrice;
     const currentValue = numberOfCoins * endPrice;
     const profit = parseFloat((currentValue - investment).toFixed(2));

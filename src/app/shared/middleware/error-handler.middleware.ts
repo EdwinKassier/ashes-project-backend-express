@@ -1,12 +1,65 @@
-// @ts-nocheck
+import type { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import type { ZodError } from 'zod';
 import { logger } from '../utils/logger.js';
+
+/**
+ * Operational error interface for domain exceptions
+ */
+interface OperationalError extends Error {
+  isOperational: boolean;
+  statusCode: number;
+  code: string;
+}
+
+/**
+ * Zod validation error interface
+ */
+interface ZodValidationError extends Error {
+  isZod: boolean;
+  errors: ZodError['issues'];
+}
+
+/**
+ * Sequelize error interface
+ */
+interface SequelizeError extends Error {
+  errors: Array<{ message: string }>;
+}
+
+/**
+ * Extended request with optional user
+ */
+interface AuthenticatedRequest extends Request {
+  user?: { id: string | number };
+}
+
+/**
+ * Type guard for operational errors
+ */
+function isOperationalError(err: Error): err is OperationalError {
+  return 'isOperational' in err && (err as OperationalError).isOperational === true;
+}
+
+/**
+ * Type guard for Zod validation errors
+ */
+function isZodError(err: Error): err is ZodValidationError {
+  return 'isZod' in err && (err as ZodValidationError).isZod === true;
+}
 
 /**
  * Global error handler
  * MUST have 4 parameters for Express to recognize it as error middleware
  */
-// eslint-disable-next-line no-unused-vars
-export const errorHandler = (err, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction
+): void => {
+  const authReq = req as AuthenticatedRequest;
+
   // Log error
   logger.error({
     message: err.message,
@@ -14,23 +67,24 @@ export const errorHandler = (err, req, res, _next) => {
     url: req.originalUrl,
     method: req.method,
     ip: req.ip,
-    userId: req.user?.id,
+    userId: authReq.user?.id,
   });
 
   // Handle operational errors (custom domain exceptions)
-  if (err.isOperational) {
-    return res.status(err.statusCode).json({
+  if (isOperationalError(err)) {
+    res.status(err.statusCode).json({
       success: false,
       error: {
         message: err.message,
         code: err.code,
       },
     });
+    return;
   }
 
   // Handle validation errors (Zod)
-  if (err.isZod) {
-    return res.status(400).json({
+  if (isZodError(err)) {
+    res.status(400).json({
       success: false,
       error: {
         message: 'Validation error',
@@ -41,30 +95,35 @@ export const errorHandler = (err, req, res, _next) => {
         })),
       },
     });
+    return;
   }
 
   // Handle Sequelize errors
   if (err.name === 'SequelizeValidationError') {
-    return res.status(400).json({
+    const seqErr = err as SequelizeError;
+    res.status(400).json({
       success: false,
       error: {
         message: 'Database validation error',
-        details: err.errors.map((e) => e.message),
+        details: seqErr.errors.map((e) => e.message),
       },
     });
+    return;
   }
 
   if (err.name === 'SequelizeDatabaseError') {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       error: {
         message: 'Database error',
       },
     });
+    return;
   }
 
   // Default error (hide details in production)
-  return res.status(err.statusCode || 500).json({
+  const statusCode = (err as OperationalError).statusCode || 500;
+  res.status(statusCode).json({
     success: false,
     error: {
       message:
@@ -77,7 +136,7 @@ export const errorHandler = (err, req, res, _next) => {
 /**
  * 404 handler for routes that don't exist
  */
-export const notFoundHandler = (req, res) => {
+export const notFoundHandler = (req: Request, res: Response): void => {
   res.status(404).json({
     success: false,
     error: {
