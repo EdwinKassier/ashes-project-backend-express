@@ -392,11 +392,71 @@ make create-prod-tag VERSION=1.0.0  # Create release tag
 |:---|:---:|:---|
 | `/health` | GET | Health check |
 | `/ready` | GET | Readiness check |
+| `/graphql` | POST | GraphQL API endpoint |
+| `/graphiql` | GET | GraphQL IDE (dev only) |
 | `/api/v1/crypto/analysis` | GET | Crypto analysis |
 | `/api/v1/crypto/graph/:symbol` | GET | Graph data |
 | `/process_request` | GET | Legacy endpoint |
 
-### API Examples
+### GraphQL API
+
+The API exposes a GraphQL endpoint for flexible querying of cryptocurrency data.
+
+**Endpoint**: `POST /graphql`
+**IDE**: `GET /graphiql` (development only)
+
+#### Available Queries
+
+```graphql
+# Health check
+query { _health }
+
+# Process crypto analysis request (mirrors /process_request)
+query {
+  processRequest(symbol: "ETH", investment: 1000) {
+    result {
+      symbol
+      investment
+      numberOfCoins
+      profit
+      growthFactor
+      lambos
+      generatedAt
+    }
+    graphData {
+      x
+      y
+    }
+    error
+  }
+}
+
+# Standalone crypto analysis
+query {
+  cryptoAnalysis(input: { symbol: "BTC", investment: 500 }) {
+    symbol
+    profit
+  }
+}
+
+# Get graph data only
+query {
+  graphData(symbol: "ETH") {
+    x
+    y
+  }
+}
+```
+
+#### Example cURL Request
+
+```bash
+curl -X POST http://localhost:3000/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ processRequest(symbol: \"ETH\", investment: 500) { result { profit } } }"}'
+```
+
+### REST API Examples
 
 ```bash
 # Health check
@@ -470,6 +530,10 @@ src/
 │   │   │   └── crypto.exceptions.ts
 │   │   ├── types/                   # TypeScript types
 │   │   │   └── crypto.types.ts
+│   │   ├── graphql/                 # GraphQL domain layer
+│   │   │   ├── schemas/             # GraphQL type definitions
+│   │   │   ├── resolvers/           # Resolver implementations
+│   │   │   └── index.ts             # Schema composition
 │   │   └── constants.ts             # Domain constants (TypeScript)
 │   │
 │   ├── shared/                      # Shared infrastructure
@@ -482,6 +546,11 @@ src/
 │   │   │   ├── cors.middleware.ts
 │   │   │   ├── health.middleware.ts
 │   │   │   └── auth.middleware.ts
+│   │   ├── graphql/                 # GraphQL infrastructure
+│   │   │   ├── handler.ts           # Express handler factory
+│   │   │   ├── schema-composer.ts   # Schema composition
+│   │   │   ├── error-handler.ts     # Error formatting
+│   │   │   └── types.ts             # GraphQL types
 │   │   ├── config/
 │   │   │   └── app.config.ts        # TypeScript
 │   │   └── utils/
